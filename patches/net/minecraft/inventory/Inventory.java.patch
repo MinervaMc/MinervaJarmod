@@ -1,0 +1,11 @@
+--- a/net/minecraft/inventory/Inventory.java
++++ b/net/minecraft/inventory/Inventory.java
+@@ -12,7 +12,7 @@
+ public class Inventory implements IInventory, IRecipeHelperPopulator
+ {
+     private final int slotsCount;
+-    private final NonNullList<ItemStack> inventoryContents;
++    protected final NonNullList<ItemStack> inventoryContents;
+     private List<IInventoryChangedListener> listeners;
+ 
+     public Inventory(int numSlots)

@@ -1,0 +1,10 @@
+--- a/net/minecraft/entity/player/ServerPlayerEntity.java
++++ b/net/minecraft/entity/player/ServerPlayerEntity.java
+@@ -973,6 +973,7 @@
+                 this.connection.sendPacket(new SOpenWindowPacket(container.windowId, container.getType(), p_213829_1_.getDisplayName()));
+                 container.addListener(this);
+                 this.openContainer = container;
++                this.openContainerTitle = p_213829_1_.getDisplayName();
+                 return OptionalInt.of(this.currentWindowId);
+             }
+         }

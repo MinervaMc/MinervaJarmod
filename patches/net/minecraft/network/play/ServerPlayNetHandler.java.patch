@@ -1,0 +1,64 @@
+--- a/net/minecraft/network/play/ServerPlayNetHandler.java
++++ b/net/minecraft/network/play/ServerPlayNetHandler.java
+@@ -11,6 +11,8 @@
+ import java.util.Collections;
+ import java.util.Set;
+ import javax.annotation.Nullable;
++import me.pablo.minerva.ContainerFakeShulkerBox;
++import me.pablo.minerva.InventoryFakeShulkerBox;
+ import net.minecraft.advancements.Advancement;
+ import net.minecraft.advancements.CriteriaTriggers;
+ import net.minecraft.block.BlockState;
+@@ -1400,7 +1402,13 @@
+     public void processCloseWindow(CCloseWindowPacket packetIn)
+     {
+         PacketThreadUtil.checkThreadAndEnqueue(packetIn, this, this.player.getServerWorld());
++        Container prev = player.openContainer;
+         this.player.closeContainer();
++
++        if (prev instanceof ContainerFakeShulkerBox)
++        {
++            ((ContainerFakeShulkerBox) prev).afterClose(this.player);
++        }
+     }
+ 
+     public void processClickWindow(CClickWindowPacket packetIn)
+@@ -1423,9 +1431,22 @@
+             }
+             else
+             {
+-                ItemStack itemstack1 = this.player.openContainer.slotClick(packetIn.getSlotId(), packetIn.getUsedButton(), packetIn.getClickType(), this.player);
++                boolean canInteract = InventoryFakeShulkerBox.canInteract(player.openContainer,
++                                                                          packetIn.getSlotId());
++                boolean openShulkerBox = InventoryFakeShulkerBox.shouldOpenInventory(player.openContainer,
++                                                                                     packetIn.getSlotId(),
++                                                                                     packetIn.getUsedButton(),
++                                                                                     packetIn.getClickType());
+ 
+-                if (ItemStack.areItemStacksEqual(packetIn.getClickedItem(), itemstack1))
++                ItemStack itemstack1 = (openShulkerBox || !canInteract) ? null :
++                                        this.player.openContainer.slotClick(packetIn.getSlotId(),
++                                                                             packetIn.getUsedButton(),
++                                                                             packetIn.getClickType(),
++                                                                             this.player);
++
++                if ((!openShulkerBox) &&
++                    canInteract &&
++                    ItemStack.areItemStacksEqual(packetIn.getClickedItem(), itemstack1))
+                 {
+                     this.player.connection.sendPacket(new SConfirmTransactionPacket(packetIn.getWindowId(), packetIn.getActionNumber(), true));
+                     this.player.isChangingQuantityOnly = true;
+@@ -1448,6 +1469,13 @@
+ 
+                     this.player.sendAllContents(this.player.openContainer, nonnulllist1);
+                 }
++
++                if (openShulkerBox && canInteract) {
++                    this.player.openContainer.setCanCraft(this.player,
++                                                          true);
++                    player.openContainer(new InventoryFakeShulkerBox(player.openContainer, player.openContainerTitle,
++                                                                     player.openContainer.inventorySlots.get(packetIn.getSlotId()).getStack()));
++                }
+             }
+         }
+     }

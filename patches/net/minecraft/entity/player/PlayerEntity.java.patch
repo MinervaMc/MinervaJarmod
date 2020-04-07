@@ -1,0 +1,10 @@
+--- a/net/minecraft/entity/player/PlayerEntity.java
++++ b/net/minecraft/entity/player/PlayerEntity.java
+@@ -123,6 +123,7 @@
+     protected EnderChestInventory enterChestInventory = new EnderChestInventory();
+     public final PlayerContainer container;
+     public Container openContainer;
++    public ITextComponent openContainerTitle;
+     protected FoodStats foodStats = new FoodStats();
+     protected int flyToggleTimer;
+     public float prevCameraYaw;

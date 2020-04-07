@@ -1,0 +1,56 @@
+--- a/net/minecraft/server/management/PlayerInteractionManager.java
++++ b/net/minecraft/server/management/PlayerInteractionManager.java
+@@ -1,10 +1,12 @@
+ package net.minecraft.server.management;
+ 
+ import java.util.Objects;
++import me.pablo.minerva.InventoryFakeShulkerBox;
+ import net.minecraft.block.Block;
+ import net.minecraft.block.BlockState;
+ import net.minecraft.block.CommandBlockBlock;
+ import net.minecraft.block.JigsawBlock;
++import net.minecraft.block.ShulkerBoxBlock;
+ import net.minecraft.block.StructureBlock;
+ import net.minecraft.entity.player.PlayerEntity;
+ import net.minecraft.entity.player.ServerPlayerEntity;
+@@ -325,8 +327,21 @@
+         }
+     }
+ 
++    private long lastShulker = 0;
++
+     public ActionResultType processRightClick(PlayerEntity player, World worldIn, ItemStack stack, Hand hand)
+     {
++        if ((lastShulker != 0) &&
++            (hand == Hand.OFF_HAND) &&
++            (lastShulker > (System.currentTimeMillis() - 100)))
++        {
++            lastShulker = 0;
++
++            return ActionResultType.FAIL;
++        }
++
++
++
+         if (this.gameType == GameType.SPECTATOR)
+         {
+             return ActionResultType.PASS;
+@@ -335,6 +350,18 @@
+         {
+             return ActionResultType.PASS;
+         }
++        else if (Block.getBlockFromItem(stack.getItem()) instanceof ShulkerBoxBlock)
++        {
++
++            player.openContainer(new InventoryFakeShulkerBox(player.openContainer, player.openContainerTitle, stack));
++
++            if (hand == Hand.MAIN_HAND)
++            {
++                lastShulker = System.currentTimeMillis();
++            }
++
++            return ActionResultType.SUCCESS;
++        }
+         else
+         {
+             int i = stack.getCount();

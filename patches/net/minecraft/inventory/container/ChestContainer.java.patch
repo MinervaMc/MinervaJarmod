@@ -1,0 +1,11 @@
+--- a/net/minecraft/inventory/container/ChestContainer.java
++++ b/net/minecraft/inventory/container/ChestContainer.java
+@@ -11,7 +11,7 @@
+ public class ChestContainer extends Container
+ {
+     private final IInventory lowerChestInventory;
+-    private final int numRows;
++    public final int numRows;
+ 
+     private ChestContainer(ContainerType<?> type, int id, PlayerInventory player, int rows)
+     {

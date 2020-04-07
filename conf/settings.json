@@ -1,15 +1,12 @@
 {
-	"modname": "examplemod",
-	"modversion": "1.0",
-	"mcpconfig": "1.14.2-20190603.175704",
-	"mappings": "20190604-1.14.2",
-	"mcversion": "1.14.2",
-	"pipeline": "joined",
-	"clientmain": "mcp.client.Start",
-	"servermain": "net.minecraft.server.MinecraftServer",
-	"reformat": true,
-	"customsrg": null,
-	"nopatches": false,
-	"customconstructors": null,
-	"fernflower": null
+    "modname": "Minerva_ShulkerMod",
+    "modversion": "1.15.2",
+    "mcpconfig": "1.15.2-20200122.131323",
+    "mappings": "20200122-1.15.1",
+    "mcversion": "1.15.2",
+    "pipeline": "joined",
+    "clientmain": "mcp.client.Start",
+    "servermain": "net.minecraft.server.MinecraftServer",
+    "reformat": true,
+    "customsrg": null
 }
